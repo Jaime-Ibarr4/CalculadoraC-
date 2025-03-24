@@ -3,8 +3,8 @@ using System.Data;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using Microsoft.CognitiveServices.Speech;
-using AForge.Video;
-using AForge.Video.DirectShow;
+//using AForge.Video;
+//using AForge.Video.DirectShow;
 
 namespace MiCalculadora
 {
@@ -12,8 +12,8 @@ namespace MiCalculadora
     {
         private SpeechRecognizer? recognizer = null;
         private bool isMicrophoneOn = false;
-        private FilterInfoCollection videoDevices; // Lista de dispositivos de video
-        private VideoCaptureDevice videoSource;   // Fuente de video actual
+       // private FilterInfoCollection videoDevices; // Lista de dispositivos de video
+       // private VideoCaptureDevice videoSource;   // Fuente de video actual
 
         public Form1()
         {
@@ -95,6 +95,18 @@ namespace MiCalculadora
                         if (recognizedText.Contains("igual"))
                         {
                             EvaluateExpression();
+                        }
+                        else if (recognizedText.Contains("borrar"))
+                        {
+                            clearButton_Click(this, EventArgs.Empty);
+                        }
+                        else if (recognizedText.Contains("abrir paréntesis"))
+                        {
+                            inputBox.Invoke((MethodInvoker)(() => inputBox.Text += "("));
+                        }
+                        else if (recognizedText.Contains("cerrar paréntesis"))
+                        {
+                            inputBox.Invoke((MethodInvoker)(() => inputBox.Text += ")"));
                         }
                         else
                         {
@@ -218,6 +230,7 @@ namespace MiCalculadora
         {
             try
             {
+                /* 
                 // Obtener la lista de cámaras disponibles
                 videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 
@@ -263,6 +276,7 @@ namespace MiCalculadora
                 };
 
                 cameraForm.ShowDialog();
+                */
             }
             catch (Exception ex)
             {

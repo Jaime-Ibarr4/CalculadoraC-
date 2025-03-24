@@ -3,8 +3,8 @@ using System.Data;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using Microsoft.CognitiveServices.Speech;
-using AForge.Video;
-using AForge.Video.DirectShow;
+//using AForge.Video;
+//using AForge.Video.DirectShow;
 
 namespace MiCalculadora
 {
@@ -12,8 +12,8 @@ namespace MiCalculadora
     {
         private SpeechRecognizer? recognizer = null;
         private bool isMicrophoneOn = false;
-        private FilterInfoCollection videoDevices; // Lista de dispositivos de video
-        private VideoCaptureDevice videoSource;   // Fuente de video actual
+       // private FilterInfoCollection videoDevices; // Lista de dispositivos de video
+       // private VideoCaptureDevice videoSource;   // Fuente de video actual
 
         public Form1()
         {
@@ -23,7 +23,7 @@ namespace MiCalculadora
 
         // Manejadores de eventos para los botones de operadores para agregar operadores al cuadro de entrada
         private void addButton_Click(object sender, EventArgs e) => inputBox.Text += "+";
-        private void subtractButton_Click(object sender, EventArgs e) => inputBox.Text += "-";
+        private void subtractButton_Click(object sender, EventArgs e) => inputBox.Text += "−"; // Cambiado a "−"
         private void multiplyButton_Click(object sender, EventArgs e) => inputBox.Text += "*";
         private void divideButton_Click(object sender, EventArgs e) => inputBox.Text += "/";
         private void openParenButton_Click(object sender, EventArgs e) => inputBox.Text += "(";
@@ -87,21 +87,64 @@ namespace MiCalculadora
                 recognizer = new SpeechRecognizer(config);
 
                 // Manejador de eventos para el reconocimiento de voz
-                recognizer.Recognized += (s, e) =>
+            recognizer.Recognized += (s, e) =>
+            {
+                if (e.Result.Reason == ResultReason.RecognizedSpeech)
                 {
-                    if (e.Result.Reason == ResultReason.RecognizedSpeech)
+                    var recognizedText = e.Result.Text.ToLower().Trim();
+
+                    try
                     {
-                        var recognizedText = e.Result.Text.ToLower();
-                        if (recognizedText.Contains("igual"))
+                        if (recognizedText.Contains("igual") || recognizedText.Contains("calcular"))
                         {
                             EvaluateExpression();
                         }
+                        else if (recognizedText.Contains("borrar") || recognizedText.Contains("eliminar") || recognizedText.Contains("limpiar"))
+                        {
+                            clearButton_Click(this, EventArgs.Empty);
+                        }
+                        else if (recognizedText.Contains("abrir paréntesis") || recognizedText.Contains("abre paréntesis"))
+                        {
+                            inputBox.Invoke((MethodInvoker)(() => inputBox.Text += "("));
+                        }
+                        else if (recognizedText.Contains("cerrar paréntesis") || recognizedText.Contains("cierra paréntesis"))
+                        {
+                            inputBox.Invoke((MethodInvoker)(() => inputBox.Text += ")"));
+                        }
+                        else if (recognizedText.Contains("seno"))
+                        {
+                            var numberText = recognizedText.Replace("seno de", "").Trim();
+                            if (double.TryParse(numberText, out double num))
+                            {
+                                inputBox.Invoke((MethodInvoker)(() => inputBox.Text = num.ToString()));
+                                resultBox.Invoke((MethodInvoker)(() => resultBox.Text = Math.Sin(num * Math.PI / 180).ToString()));
+                            }
+                        }
+                        else if (recognizedText.Contains("raíz cuadrada de") || recognizedText.Contains("raíz") || recognizedText.Contains("raíz cuadrada"))
+                        {
+                            var numberText = recognizedText.Replace("raíz cuadrada de", "").Trim();
+                            if (double.TryParse(numberText, out double num))
+                            {
+                                inputBox.Invoke((MethodInvoker)(() => inputBox.Text = num.ToString()));
+                                resultBox.Invoke((MethodInvoker)(() => resultBox.Text = Math.Sqrt(num).ToString()));
+                            }
+                        }
+                        else if (recognizedText.Contains("pi"))
+                        {
+                            inputBox.Invoke((MethodInvoker)(() => inputBox.Text += "3.14159"));
+                        }
                         else
                         {
-                            inputBox.Invoke((MethodInvoker)(() => inputBox.Text += e.Result.Text));
+                            inputBox.Invoke((MethodInvoker)(() => inputBox.Text += recognizedText));
                         }
                     }
-                };
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error al procesar el comando: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            };
+
 
                 // Manejador de eventos para la cancelación del reconocimiento
                 recognizer.Canceled += async (s, e) =>
@@ -202,7 +245,9 @@ namespace MiCalculadora
         {
             try
             {
-                var result = new DataTable().Compute(inputBox.Text, null);
+                // Reemplaza el símbolo "−" por el guion "-"
+                var expression = inputBox.Text.Replace("−", "-");
+                var result = new DataTable().Compute(expression, null);
                 resultBox.Text = result.ToString();
             }
             catch (Exception)
@@ -210,6 +255,5 @@ namespace MiCalculadora
                 resultBox.Text = "Error";
             }
         }
-
     }
 }

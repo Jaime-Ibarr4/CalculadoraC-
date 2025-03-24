@@ -99,7 +99,7 @@
             this.subtractButton.Location = new System.Drawing.Point(236, 90);
             this.subtractButton.Name = "subtractButton";
             this.subtractButton.Size = new System.Drawing.Size(50, 23);
-            this.subtractButton.Text = "-";
+            this.subtractButton.Text = "−";
             this.subtractButton.BackColor = System.Drawing.Color.FromArgb(108, 117, 125);
             this.subtractButton.ForeColor = System.Drawing.Color.White;
             this.subtractButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

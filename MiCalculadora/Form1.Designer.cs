@@ -26,6 +26,7 @@
         private System.Windows.Forms.Button closeParenButton;
         private System.Windows.Forms.Button sinButton;
         private System.Windows.Forms.Button voiceButton;
+        private System.Windows.Forms.Button cameraButton;
 
         protected override void Dispose(bool disposing)
         {
@@ -62,6 +63,7 @@
             this.closeParenButton = new System.Windows.Forms.Button();
             this.sinButton = new System.Windows.Forms.Button();
             this.voiceButton = new System.Windows.Forms.Button();
+            this.cameraButton = new System.Windows.Forms.Button();
 
             this.SuspendLayout();
 
@@ -312,6 +314,18 @@
             this.voiceButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.voiceButton.Font = new System.Drawing.Font("Arial", 12F);
             this.voiceButton.Click += new System.EventHandler(this.voiceButton_Click);
+
+            // cameraButton
+            this.cameraButton.Location = new System.Drawing.Point(12, 210);
+            this.cameraButton.Name = "cameraButton";
+            this.cameraButton.Size = new System.Drawing.Size(100, 23);
+            this.cameraButton.Text = "Abrir Cámara";
+            this.cameraButton.BackColor = System.Drawing.Color.FromArgb(108, 117, 125);
+            this.cameraButton.ForeColor = System.Drawing.Color.White;
+            this.cameraButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cameraButton.Font = new System.Drawing.Font("Arial", 10F);
+            this.cameraButton.Click += new System.EventHandler(this.cameraButton_Click);
+            this.Controls.Add(this.cameraButton);
 
             // Form1
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

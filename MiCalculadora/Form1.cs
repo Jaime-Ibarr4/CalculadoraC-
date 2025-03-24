@@ -95,32 +95,32 @@ namespace MiCalculadora
 
                     try
                     {
-                        if (recognizedText.Contains("igual"))
+                        if (recognizedText.Contains("igual") || recognizedText.Contains("calcular"))
                         {
                             EvaluateExpression();
                         }
-                        else if (recognizedText.Contains("borrar"))
+                        else if (recognizedText.Contains("borrar") || recognizedText.Contains("eliminar") || recognizedText.Contains("limpiar"))
                         {
                             clearButton_Click(this, EventArgs.Empty);
                         }
-                        else if (recognizedText.Contains("abrir paréntesis"))
+                        else if (recognizedText.Contains("abrir paréntesis") || recognizedText.Contains("abre paréntesis"))
                         {
                             inputBox.Invoke((MethodInvoker)(() => inputBox.Text += "("));
                         }
-                        else if (recognizedText.Contains("cerrar paréntesis"))
+                        else if (recognizedText.Contains("cerrar paréntesis") || recognizedText.Contains("cierra paréntesis"))
                         {
                             inputBox.Invoke((MethodInvoker)(() => inputBox.Text += ")"));
                         }
-                        else if (recognizedText.Contains("seno de"))
+                        else if (recognizedText.Contains("seno"))
                         {
                             var numberText = recognizedText.Replace("seno de", "").Trim();
                             if (double.TryParse(numberText, out double num))
                             {
                                 inputBox.Invoke((MethodInvoker)(() => inputBox.Text = num.ToString()));
-                                resultBox.Invoke((MethodInvoker)(() => resultBox.Text = Math.Sin(num * Math.PI / 180).ToString())); // Conversión a radianes
+                                resultBox.Invoke((MethodInvoker)(() => resultBox.Text = Math.Sin(num * Math.PI / 180).ToString()));
                             }
                         }
-                        else if (recognizedText.Contains("raíz cuadrada de"))
+                        else if (recognizedText.Contains("raíz cuadrada de") || recognizedText.Contains("raíz") || recognizedText.Contains("raíz cuadrada"))
                         {
                             var numberText = recognizedText.Replace("raíz cuadrada de", "").Trim();
                             if (double.TryParse(numberText, out double num))
@@ -128,6 +128,10 @@ namespace MiCalculadora
                                 inputBox.Invoke((MethodInvoker)(() => inputBox.Text = num.ToString()));
                                 resultBox.Invoke((MethodInvoker)(() => resultBox.Text = Math.Sqrt(num).ToString()));
                             }
+                        }
+                        else if (recognizedText.Contains("pi"))
+                        {
+                            inputBox.Invoke((MethodInvoker)(() => inputBox.Text += "3.14159"));
                         }
                         else
                         {

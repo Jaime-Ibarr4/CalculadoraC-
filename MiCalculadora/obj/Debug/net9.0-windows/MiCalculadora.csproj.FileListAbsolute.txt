@@ -142,3 +142,4 @@ C:\Users\USER\Desktop\MiCalculadora-copia\MiCalculadora\obj\Debug\net9.0-windows
 C:\Users\USER\Desktop\MiCalculadora-copia\MiCalculadora\obj\Debug\net9.0-windows\MiCalculadora.pdb
 C:\Users\USER\Desktop\MiCalculadora-copia\MiCalculadora\obj\Debug\net9.0-windows\MiCalculadora.genruntimeconfig.cache
 C:\Users\USER\Desktop\MiCalculadora-copia\MiCalculadora\obj\Debug\net9.0-windows\ref\MiCalculadora.dll
+C:\Users\USER\Desktop\MiCalculadora-copia\MiCalculadora\obj\Debug\net9.0-windows\MiCalculadora.sourcelink.json

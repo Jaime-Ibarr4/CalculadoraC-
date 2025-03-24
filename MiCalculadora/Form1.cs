@@ -19,7 +19,7 @@ namespace MiCalculadora
 
         // Manejadores de eventos para los botones de operadores para agregar operadores al cuadro de entrada
         private void addButton_Click(object sender, EventArgs e) => inputBox.Text += "+";
-        private void subtractButton_Click(object sender, EventArgs e) => inputBox.Text += "-";
+        private void subtractButton_Click(object sender, EventArgs e) => inputBox.Text += "−"; // Cambiado a "−"
         private void multiplyButton_Click(object sender, EventArgs e) => inputBox.Text += "*";
         private void divideButton_Click(object sender, EventArgs e) => inputBox.Text += "/";
         private void openParenButton_Click(object sender, EventArgs e) => inputBox.Text += "(";
@@ -198,7 +198,9 @@ namespace MiCalculadora
         {
             try
             {
-                var result = new DataTable().Compute(inputBox.Text, null);
+                // Reemplaza el símbolo "−" por el guion "-"
+                var expression = inputBox.Text.Replace("−", "-");
+                var result = new DataTable().Compute(expression, null);
                 resultBox.Text = result.ToString();
             }
             catch (Exception)

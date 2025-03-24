@@ -316,7 +316,7 @@
             this.voiceButton.Click += new System.EventHandler(this.voiceButton_Click);
 
             // cameraButton
-            this.cameraButton.Location = new System.Drawing.Point(12, 240);
+            this.cameraButton.Location = new System.Drawing.Point(12, 220);
             this.cameraButton.Name = "cameraButton";
             this.cameraButton.Size = new System.Drawing.Size(100, 30);
             this.cameraButton.Text = "Abrir Cámara";

@@ -87,11 +87,14 @@ namespace MiCalculadora
                 recognizer = new SpeechRecognizer(config);
 
                 // Manejador de eventos para el reconocimiento de voz
-                recognizer.Recognized += (s, e) =>
+            recognizer.Recognized += (s, e) =>
+            {
+                if (e.Result.Reason == ResultReason.RecognizedSpeech)
                 {
-                    if (e.Result.Reason == ResultReason.RecognizedSpeech)
+                    var recognizedText = e.Result.Text.ToLower().Trim();
+
+                    try
                     {
-                        var recognizedText = e.Result.Text.ToLower();
                         if (recognizedText.Contains("igual"))
                         {
                             EvaluateExpression();
@@ -108,12 +111,36 @@ namespace MiCalculadora
                         {
                             inputBox.Invoke((MethodInvoker)(() => inputBox.Text += ")"));
                         }
+                        else if (recognizedText.Contains("seno de"))
+                        {
+                            var numberText = recognizedText.Replace("seno de", "").Trim();
+                            if (double.TryParse(numberText, out double num))
+                            {
+                                inputBox.Invoke((MethodInvoker)(() => inputBox.Text = num.ToString()));
+                                resultBox.Invoke((MethodInvoker)(() => resultBox.Text = Math.Sin(num * Math.PI / 180).ToString())); // Conversión a radianes
+                            }
+                        }
+                        else if (recognizedText.Contains("raíz cuadrada de"))
+                        {
+                            var numberText = recognizedText.Replace("raíz cuadrada de", "").Trim();
+                            if (double.TryParse(numberText, out double num))
+                            {
+                                inputBox.Invoke((MethodInvoker)(() => inputBox.Text = num.ToString()));
+                                resultBox.Invoke((MethodInvoker)(() => resultBox.Text = Math.Sqrt(num).ToString()));
+                            }
+                        }
                         else
                         {
-                            inputBox.Invoke((MethodInvoker)(() => inputBox.Text += e.Result.Text));
+                            inputBox.Invoke((MethodInvoker)(() => inputBox.Text += recognizedText));
                         }
                     }
-                };
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error al procesar el comando: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            };
+
 
                 // Manejador de eventos para la cancelación del reconocimiento
                 recognizer.Canceled += async (s, e) =>

@@ -3,6 +3,8 @@ using System.Data;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using Microsoft.CognitiveServices.Speech;
+using AForge.Video;
+using AForge.Video.DirectShow;
 
 namespace MiCalculadora
 {
@@ -10,6 +12,8 @@ namespace MiCalculadora
     {
         private SpeechRecognizer? recognizer = null;
         private bool isMicrophoneOn = false;
+        private FilterInfoCollection videoDevices; // Lista de dispositivos de video
+        private VideoCaptureDevice videoSource;   // Fuente de video actual
 
         public Form1()
         {
@@ -204,6 +208,63 @@ namespace MiCalculadora
             catch (Exception)
             {
                 resultBox.Text = "Error";
+            }
+        }
+
+        // Manejador de eventos para el botón de cámara para abrir la cámara
+        private void cameraButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Obtener la lista de cámaras disponibles
+                videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
+                if (videoDevices.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron cámaras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Seleccionar la primera cámara disponible
+                videoSource = new VideoCaptureDevice(videoDevices[0].MonikerString);
+
+                // Crear un formulario para mostrar la cámara
+                Form cameraForm = new Form
+                {
+                    Text = "Cámara",
+                    Width = 640,
+                    Height = 480
+                };
+
+                PictureBox videoBox = new PictureBox
+                {
+                    Dock = DockStyle.Fill,
+                    SizeMode = PictureBoxSizeMode.StretchImage
+                };
+                cameraForm.Controls.Add(videoBox);
+
+                // Iniciar la transmisión de video
+                videoSource.NewFrame += (s, eventArgs) =>
+                {
+                    Bitmap frame = (Bitmap)eventArgs.Frame.Clone();
+                    videoBox.Image = frame;
+                };
+
+                videoSource.Start();
+                cameraForm.FormClosing += (s, eventArgs) =>
+                {
+                    if (videoSource.IsRunning)
+                    {
+                        videoSource.SignalToStop();
+                        videoSource.WaitForStop();
+                    }
+                };
+
+                cameraForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al abrir la cámara: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

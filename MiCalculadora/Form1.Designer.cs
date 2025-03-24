@@ -316,9 +316,9 @@
             this.voiceButton.Click += new System.EventHandler(this.voiceButton_Click);
 
             // cameraButton
-            this.cameraButton.Location = new System.Drawing.Point(12, 210);
+            this.cameraButton.Location = new System.Drawing.Point(12, 240);
             this.cameraButton.Name = "cameraButton";
-            this.cameraButton.Size = new System.Drawing.Size(100, 23);
+            this.cameraButton.Size = new System.Drawing.Size(100, 30);
             this.cameraButton.Text = "Abrir Cámara";
             this.cameraButton.BackColor = System.Drawing.Color.FromArgb(108, 117, 125);
             this.cameraButton.ForeColor = System.Drawing.Color.White;
